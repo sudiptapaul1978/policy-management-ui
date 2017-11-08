@@ -1,0 +1,24 @@
+
+<!--The content below is only a placeholder and can be replaced.-->
+<div class="container table-bordered table-condensed">
+  <div class="row ">
+    <div class="col-sm-12">
+      <h1 class="text-center">
+      {{title}}
+      </h1>
+    </div>
+  </div>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid align-to">
+      <div class="col-sm-3 text-center">
+        <a [routerLink]="['/home']" class="navbar-link">Home</a>
+      </div>
+      <div class="col-sm-3 text-center"><a src="#" class="navbar-link">About Us</a></div>
+      <div class="col-sm-3 text-center"><a src="#" class="navbar-link">Contact Us</a></div>
+    </div>
+  </nav><!--
+  <div class="row "><hr/></div>-->
+  <router-outlet></router-outlet>
+</div>
+
+

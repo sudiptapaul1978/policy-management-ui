@@ -1,0 +1,22 @@
+.border-none {
+  border-right: 0px;
+  border-top: 0px;
+  border-bottom: 0px;
+}
+
+tbody {
+  display:block;
+  height:100px;
+  overflow:auto;
+}
+thead, tbody tr {
+  display:table;
+  width:100%;
+  table-layout:fixed;
+}
+thead {
+  background-color:#dddddd;
+  width: calc( 100% - 1em )
+}
+
+
