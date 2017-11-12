@@ -14,6 +14,7 @@ import { MatchValidatorDirective } from './_validators/match-validator.directive
 import {AuthGuard} from './_guards/auth.guard';
 import { LandingComponent } from './landing/landing.component';
 import { UserPolicyChildComponent } from './user-policy-child/user-policy-child.component';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { UserPolicyChildComponent } from './user-policy-child/user-policy-child.
     HttpModule,
     FormsModule,
     AppRoutingModule,
-    MyDatePickerModule
+    MyDatePickerModule,
+    HttpClientModule
   ],
   providers: [AuthGuard],
   bootstrap: [AppComponent]

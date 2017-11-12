@@ -7,6 +7,7 @@ import 'rxjs/add/observable/throw';
 import {User} from '../_models/user';
 import {environment} from '../../environments/environment';
 import { URLSearchParams } from '@angular/http';
+import {LoginRequest} from "../_models/login-request";
 
 
 @Injectable()
@@ -26,12 +27,11 @@ export class UserService {
   login(userName: string, password: string): Observable<User> {
     console.log('In UserService.login()');
     console.log(JSON.stringify({ userName: userName, password: password }));
-    const urlSearchParams = new URLSearchParams();
-    urlSearchParams.append('userName', userName);
-    urlSearchParams.append('password', password);
+    const loginRequest = new LoginRequest();
+    loginRequest.userName = userName;
+    loginRequest.password = password;
 
-    return this.http.post(`${this.userURL}/login`
-      , urlSearchParams)
+    return this.http.post(`${this.userURL}/login`, JSON.stringify(loginRequest), {headers: this.getHeaders()})
       .map(mapUserFromResponse);
   }
 
@@ -45,6 +45,8 @@ export class UserService {
     const headers = new Headers();
     headers.append('Accept', 'application/json');
     headers.append('Content-Type', 'application/json;charset=UTF-8');
+    headers.append('Authorization', 'Bearer 73488227-3ee8-36ff-9855-0611d0525275');
+    // headers.append('Authorization', 'Bearer ' + this.getToken());
     return headers;
   }
 }

@@ -7,32 +7,49 @@ import 'rxjs/add/observable/throw';
 import {Http, Response, Headers} from '@angular/http';
 import { URLSearchParams } from '@angular/http';
 import {Policy} from '../_models/policy';
+import {TokenGeneratorService} from './token-generator.service';
 
 @Injectable()
 export class PolicyService {
 
   private policyURL = environment.policyURL;
-  constructor(private http: Http) { }
+  private authToken: string;
+  constructor(private http: Http, private tokenGeneratorSvc: TokenGeneratorService) { }
 
   getPolicyName(policyId: string): Observable<string> {
     console.log('In get policy with policyId > ' + policyId);
     const urlSearchParams = new URLSearchParams();
     urlSearchParams.append('policyId', policyId);
-    return this.http.post(`${this.policyURL}/getPolicy` , urlSearchParams)
+    const formData = new FormData();
+    formData.append('policyId', policyId);
+    const test = {'policyId': policyId};
+
+    console.log('JSON.stringify(urlSearchParams) > ' + JSON.stringify(test));
+    // return this.http.post(`${this.policyURL}/getPolicy` , urlSearchParams, {headers: this.getHeaders()}).map(mapPolicyFromResponse);
+
+    return this.http.post(`${this.policyURL}/getPolicy?policyId=${policyId}` , urlSearchParams, {headers: this.getHeaders()})
       .map(mapPolicyFromResponse);
   }
   getAllPolicies(): Observable<Policy[]> {
     console.log('In get all policies');
-    return this.http.get(`${this.policyURL}/getAllPolicies`)
+    // return this.http.get(`${this.policyURL}/getAllPolicies`, {headers: this.getHeaders()}).map(mapPoliciesFromResponse);
+    return this.http.get(`${this.policyURL}/getAllPolicies`, {headers: this.getHeaders()})
       .map(mapPoliciesFromResponse);
   }
   updatePolicy(policy: Policy) {
-    const urlSearchParams = new URLSearchParams();
-    urlSearchParams.append('policyNumber', policy.policyNumber);
-    urlSearchParams.append('policyName', policy.policyName);
-    urlSearchParams.append('policyDetails', policy.policyDetails);
-    return this.http.post(`${this.policyURL}/addOrUpdate` , urlSearchParams)
+    return this.http.post(`${this.policyURL}/addOrUpdate` , JSON.stringify(policy), {headers: this.getHeaders()})
       .map(mapSavePolicyResponse);
+  }
+
+  private getHeaders() {
+    const headers = new Headers();
+    headers.append('Accept', 'application/json');
+    headers.append('Content-Type', 'application/json;charset=UTF-8');
+    headers.append('Authorization', 'Bearer 73488227-3ee8-36ff-9855-0611d0525275');
+
+    this.tokenGeneratorSvc.generateAppToken().subscribe(res => this.authToken = res);
+    console.log('Inside Service, the getHeaders > ' + this.authToken);
+    return headers;
   }
 }
 
