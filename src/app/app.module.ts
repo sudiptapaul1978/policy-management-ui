@@ -14,7 +14,9 @@ import { MatchValidatorDirective } from './_validators/match-validator.directive
 import {AuthGuard} from './_guards/auth.guard';
 import { LandingComponent } from './landing/landing.component';
 import { UserPolicyChildComponent } from './user-policy-child/user-policy-child.component';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {HttpRequestsInterceptor} from './_interceptor/http.requests.interceptor';
+import {TokenGeneratorService} from './_service/token-generator.service';
 
 @NgModule({
   declarations: [
@@ -36,7 +38,11 @@ import {HttpClientModule} from '@angular/common/http';
     MyDatePickerModule,
     HttpClientModule
   ],
-  providers: [AuthGuard],
+  providers: [AuthGuard, {
+    provide: HTTP_INTERCEPTORS,
+    useClass: HttpRequestsInterceptor,
+    multi: true
+  }, TokenGeneratorService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

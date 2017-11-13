@@ -8,13 +8,14 @@ import {Http, Response, Headers} from '@angular/http';
 import { URLSearchParams } from '@angular/http';
 import {Policy} from '../_models/policy';
 import {TokenGeneratorService} from './token-generator.service';
+import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 
 @Injectable()
 export class PolicyService {
 
   private policyURL = environment.policyURL;
   private authToken: string;
-  constructor(private http: Http, private tokenGeneratorSvc: TokenGeneratorService) { }
+  constructor(private http: HttpClient) { }
 
   getPolicyName(policyId: string): Observable<string> {
     console.log('In get policy with policyId > ' + policyId);
@@ -42,31 +43,27 @@ export class PolicyService {
   }
 
   private getHeaders() {
-    const headers = new Headers();
+    const headers = new HttpHeaders();
     headers.append('Accept', 'application/json');
-    headers.append('Content-Type', 'application/json;charset=UTF-8');
-    headers.append('Authorization', 'Bearer 73488227-3ee8-36ff-9855-0611d0525275');
-
-    this.tokenGeneratorSvc.generateAppToken().subscribe(res => this.authToken = res);
-    console.log('Inside Service, the getHeaders > ' + this.authToken);
+    // headers.append('Content-Type', 'application/json');
     return headers;
   }
 }
 
-function mapPolicyFromResponse(response: Response): string {
-  return toPolicyName(response.json());
+function mapPolicyFromResponse(response: HttpResponse<any>): string {
+  return toPolicyName(response);
 }
 function toPolicyName(res: any): string {
   return res.status === '1' ? res.policy.policyName : null;
 }
-function mapPoliciesFromResponse(response: Response): Policy[] {
-  return toPolicies(response.json());
+function mapPoliciesFromResponse(response: HttpResponse<any>): Policy[] {
+  return toPolicies(response);
 }
 function toPolicies(res: any): Policy[] {
   return res.status === '1' ? res.policies : null;
 }
-function mapSavePolicyResponse(response: Response): string {
-  return toSaveMessage(response.json());
+function mapSavePolicyResponse(response: HttpResponse<any>): string {
+  return toSaveMessage(response);
 }
 function toSaveMessage(res: any): string {
   return res.status === '1' ? res.message : 'Error updating policy.';

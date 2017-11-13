@@ -1,6 +1,7 @@
-export interface AppToken {
-  access_token: string;
+export class AppToken {
+  accessToken: string;
   scope: string;
-  token_type: string;
-  expires_in: number;
+  tokenType: string;
+  expiresIn: number;
+  tokenGenerationTime: number;
 }

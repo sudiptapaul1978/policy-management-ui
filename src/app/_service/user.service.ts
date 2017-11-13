@@ -7,14 +7,17 @@ import 'rxjs/add/observable/throw';
 import {User} from '../_models/user';
 import {environment} from '../../environments/environment';
 import { URLSearchParams } from '@angular/http';
-import {LoginRequest} from "../_models/login-request";
+import {LoginRequest} from '../_models/login-request';
+import {TokenGeneratorService} from './token-generator.service';
+import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 
 
 @Injectable()
 export class UserService {
 
   private userURL = environment.userURL;
-  constructor(private http: Http) { }
+  private authToken: string;
+  constructor(private http: HttpClient) { }
 
   registerUser(user: User): Observable<User> {
     console.log('In UserService.registerUser()');
@@ -36,23 +39,22 @@ export class UserService {
   }
 
   logout() {
+    console.log('new Logout Timestamp() > ' + (Date.now() / 1000));
     console.log('In UserService.logout()');
     // remove user from local storage to log user out
     localStorage.removeItem('currentUser');
   }
 
   private getHeaders() {
-    const headers = new Headers();
+    const headers = new HttpHeaders();
     headers.append('Accept', 'application/json');
-    headers.append('Content-Type', 'application/json;charset=UTF-8');
-    headers.append('Authorization', 'Bearer 73488227-3ee8-36ff-9855-0611d0525275');
-    // headers.append('Authorization', 'Bearer ' + this.getToken());
+    // headers.append('Content-Type', 'application/json');
     return headers;
   }
 }
 
-function mapUserFromResponse(response: Response): User {
-  return toUser(response.json());
+function mapUserFromResponse(response: HttpResponse<any>): User {
+  return toUser(response);
 }
 
 function toUser(res: any): User {
