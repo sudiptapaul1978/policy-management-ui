@@ -14,7 +14,8 @@ export class HttpRequestsInterceptor implements HttpInterceptor {
   constructor(private tokenGeneratorService: TokenGeneratorService) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    let appToken = this.tokenGeneratorService.getToken();
+    /*
+    const appToken = this.tokenGeneratorService.getToken();
     console.log('appToken in Local Storage > ' + JSON.stringify(appToken));
     const lastAppTokenExprires = appToken.expiresIn;
     const tokenGenerationTime = appToken.tokenGenerationTime;
@@ -26,19 +27,23 @@ export class HttpRequestsInterceptor implements HttpInterceptor {
     console.log('currentTimeInSeconds > ' + currentTimeInSeconds);
     console.log('timeSpendFromLastTokenGeneration > ' + timeSpendFromLastTokenGeneration);
     console.log('timeRemaining > ' + timeRemaining);
-
+    */
+    /*
     if (appToken === null || appToken.accessToken === '' || timeRemaining < 5) {
       this.tokenGeneratorService.getTokenFromWSO2().subscribe( resp => {
         appToken = resp;
         this.tokenGeneratorService.setToken(appToken);
       });
     }
+     */
     request = request.clone({
       setHeaders: {
-        'Authorization' : `Bearer ${appToken.accessToken}`,
+        // 'Authorization' : `Bearer ${appToken.accessToken}`,
         'Content-Type': 'application/json'
       }
     });
+
+
     return next.handle(request).do((event: HttpEvent<any>) => {
       if (event instanceof HttpResponse) {
         console.log('httpReponse is good');
@@ -47,11 +52,13 @@ export class HttpRequestsInterceptor implements HttpInterceptor {
       if (err instanceof HttpErrorResponse) {
         if (err.status === 401) {
           console.log('unauthorized response');
+          /*
           this.tokenGeneratorService.getTokenFromWSO2()
             .subscribe(resp => {
               console.log('got token in authservice:' + resp);
               this.tokenGeneratorService.setToken(resp);
             });
+            */
         }
       }
     });
