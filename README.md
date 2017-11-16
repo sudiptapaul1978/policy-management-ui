@@ -1,4 +1,4 @@
-PolicyMgmtUi Local
+PolicyMgmtUi Local (Modify)
 
 This project was generated with Angular CLI version 1.4.7. Install angular cli through node.
 
