@@ -11,6 +11,7 @@ import {Policy} from '../_models/policy';
 export class AllPoliciesComponent implements OnInit {
   loggedInUser: User;
   policies: Policy[];
+  updateMsg: String;
   constructor(private policyService: PolicyService) { }
 
   ngOnInit() {
@@ -24,16 +25,12 @@ export class AllPoliciesComponent implements OnInit {
   }
 
   editPolicy(policy: Policy) {
-    console.log('in edit policy: ' + policy.policyName);
     policy.isBeingEdited = true;
-    console.log('in editing...: ' + policy.policyName);
   }
   savePolicy(policy: Policy) {
-
-    console.log('in save policy: ' + policy.policyName);
-    console.log('in editing...: ' + policy.policyDetails);
     this.policyService.updatePolicy(policy)
       .subscribe(res => {
+        this.updateMsg = res;
         policy.policyUpdateMsg = res;
         policy.isBeingEdited = false;
       });
