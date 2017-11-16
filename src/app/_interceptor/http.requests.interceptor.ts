@@ -8,7 +8,6 @@ import {
 import { Observable } from 'rxjs/Observable';
 import {TokenGeneratorService} from '../_service/token-generator.service';
 import 'rxjs/add/operator/do';
-import {AppToken} from "../_models/app-token";
 
 @Injectable()
 export class HttpRequestsInterceptor implements HttpInterceptor {
@@ -29,20 +28,11 @@ export class HttpRequestsInterceptor implements HttpInterceptor {
     console.log('timeRemaining > ' + timeRemaining);
 
     if (appToken === null || appToken.accessToken === '' || timeRemaining < 5) {
-      console.log('Going to call for a new token');
       this.tokenGeneratorService.getTokenFromWSO2().subscribe( resp => {
         appToken = resp;
         this.tokenGeneratorService.setToken(appToken);
-        return this.handlePrevRequest(request, next, appToken);
       });
-
-    } else {
-      return this.handlePrevRequest(request, next, appToken);
     }
-
-  }
-
-  handlePrevRequest(request: HttpRequest<any>, next: HttpHandler, appToken: AppToken): Observable<HttpEvent<any>>  {
     request = request.clone({
       setHeaders: {
         'Authorization' : `Bearer ${appToken.accessToken}`,
@@ -57,7 +47,8 @@ export class HttpRequestsInterceptor implements HttpInterceptor {
       if (err instanceof HttpErrorResponse) {
         if (err.status === 401) {
           console.log('unauthorized response');
-          this.tokenGeneratorService.getTokenFromWSO2().subscribe(resp => {
+          this.tokenGeneratorService.getTokenFromWSO2()
+            .subscribe(resp => {
               console.log('got token in authservice:' + resp);
               this.tokenGeneratorService.setToken(resp);
             });

@@ -39,6 +39,31 @@ export class TokenGeneratorService {
       .map(mapTokenFromResponse);
   }
 
+  getCurrentTokenOrFromWSO2(): Observable<AppToken> {
+    const appToken = this.getToken();
+    console.log('appToken in Local Storage > ' + JSON.stringify(appToken));
+    const lastAppTokenExprires = appToken.expiresIn;
+    const tokenGenerationTime = appToken.tokenGenerationTime;
+    const currentTimeInSeconds = Math.round((Date.now()) / 1000);
+    const timeSpendFromLastTokenGeneration = (currentTimeInSeconds - tokenGenerationTime);
+    const timeRemaining = (lastAppTokenExprires - timeSpendFromLastTokenGeneration);
+    console.log('lastAppTokenExprires > ' + lastAppTokenExprires);
+    console.log('tokenGenerationTime > ' + tokenGenerationTime);
+    console.log('currentTimeInSeconds > ' + currentTimeInSeconds);
+    console.log('timeSpendFromLastTokenGenerationTillNow > ' + timeSpendFromLastTokenGeneration);
+    console.log('timeRemaining > ' + timeRemaining);
+
+    if (appToken === null || appToken.accessToken === '' || timeRemaining < 5) {
+      const urlSearchParams = new URLSearchParams();
+      urlSearchParams.append('grant_type', 'client_credentials');
+      return this.http.post(`${this.tokenURL}` , urlSearchParams, { headers: this.getHeaders()})
+        .map(mapTokenFromResponse);
+    } else {
+      return null;
+    }
+
+  }
+
   private getHeaders() {
     const headers = new Headers();
     headers.append('Authorization', environment.tokenAuthKey);
