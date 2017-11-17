@@ -14,7 +14,7 @@ export class HttpRequestsInterceptor implements HttpInterceptor {
   constructor(private tokenGeneratorService: TokenGeneratorService) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log('The isDevMode() > ' + isDevMode());
+    console.log('The isDevMode() is > ' + isDevMode());
     let appToken = this.tokenGeneratorService.getToken();
     console.log('The appToken in Local Storage > ' + JSON.stringify(appToken));
     if (!isDevMode()) {
