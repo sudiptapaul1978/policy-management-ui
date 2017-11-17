@@ -14,12 +14,11 @@ export class HttpRequestsInterceptor implements HttpInterceptor {
   constructor(private tokenGeneratorService: TokenGeneratorService) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log('isDevMode() > ' + isDevMode());
+    console.log('The isDevMode() > ' + isDevMode());
     let appToken = this.tokenGeneratorService.getToken();
-    console.log('appToken in Local Storage > ' + JSON.stringify(appToken));
+    console.log('The appToken in Local Storage > ' + JSON.stringify(appToken));
     if (!isDevMode()) {
       // go for WSO2 token generation
-      console.log('appToken in Local Storage > ' + JSON.stringify(appToken));
       const lastAppTokenExprires = appToken.expiresIn;
       const tokenGenerationTime = appToken.tokenGenerationTime;
       const currentTimeInSeconds = Math.round((Date.now()) / 1000);
