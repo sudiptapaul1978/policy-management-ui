@@ -69,8 +69,8 @@
       Email Address<span class="glyphicon glyphicon-asterisk"></span>
     </div>
     <div class="col-sm-2">
-      <input type="email" class="form-control" name="email"
-             pattern="[0-9 a-z A-Z_.@]*"
+      <input type="email" class="form-control" name="emailAddress" id="emailAddress"
+             pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}"
              required [(ngModel)]="user.emailAddress" #emailAddress="ngModel" />
     </div>
     <div class="col-sm-4" *ngIf="emailAddress.errors && (emailAddress.dirty || emailAddress.touched)" class="error">

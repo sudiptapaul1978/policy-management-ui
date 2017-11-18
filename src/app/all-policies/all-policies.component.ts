@@ -9,9 +9,11 @@ import {Policy} from '../_models/policy';
   styleUrls: ['./all-policies.component.scss']
 })
 export class AllPoliciesComponent implements OnInit {
+  // pleaseWaitImg = require('../../../src/pleasewait.gif');
   loggedInUser: User;
   policies: Policy[];
   updateMsg: String;
+  loadedPolicies: string;
   constructor(private policyService: PolicyService) { }
 
   ngOnInit() {
@@ -21,7 +23,10 @@ export class AllPoliciesComponent implements OnInit {
 
   getAllPolicies() {
     this.policyService.getAllPolicies()
-      .subscribe(res => this.policies = res);
+      .subscribe(res => {
+        this.policies = res;
+        this.loadedPolicies = 'Y';
+      });
   }
 
   editPolicy(policy: Policy) {

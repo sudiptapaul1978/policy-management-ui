@@ -19,6 +19,11 @@
         </tr>
         </thead>
         <tbody>
+        <tr *ngIf="loadedPolicies" >
+          <td colspan="4" align="center">
+            <img src="assets/images/pleasewait.gif">
+          </td>
+        </tr>
         <tr *ngFor="let policy of policies; let counter = index"  >
           <td>{{counter+1}}</td>
           <td>
